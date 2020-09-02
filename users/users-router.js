@@ -26,7 +26,7 @@ router.post("/api/register", async (req, res, next) => {
 
         const newUser = await Users.add({
             username,
-            password: await bcrypt.hash(password, 14)
+            password: await bcrypt.hash(password, 14),
          })
 
          res.status(201).json(newUser)
@@ -36,12 +36,12 @@ router.post("/api/register", async (req, res, next) => {
     }
 })
 
-router.post("/api/login", middleware.restrict(), async (req, res, next) => {
+router.post("/api/login",  async (req, res, next) => {
     try {
         const { username, password} = req.body
         const user = await Users.findBy({username}).first()
 
-        if (user) { 
+        if (!user) { 
             return res.status(401).json({
                 message: "Sorry, you're not real."
             })
